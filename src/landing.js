@@ -50,7 +50,7 @@ const translations = {
         btn_scale_now: "Scale Now",
         footer_rights: "All rights reserved.",
         reg_title: "Ready to transform your business?",
-        reg_subtitle: "Join thousands of professionals who have optimized their workflow with ServiceFlow.",
+        reg_subtitle: "Join thousands of professionals who have optimized their workflow with ServicesErp.",
         reg_trust_1: "Secure Data",
         reg_trust_2: "Quick Setup",
         reg_trust_3: "24/7 Support",
@@ -110,7 +110,7 @@ const translations = {
         btn_scale_now: "Crecer Ahora",
         footer_rights: "Todos los derechos reservados.",
         reg_title: "¿Listo para transformar tu negocio?",
-        reg_subtitle: "Únete a miles de profesionales que han optimizado su flujo de trabajo con ServiceFlow.",
+        reg_subtitle: "Únete a miles de profesionales que han optimizado su flujo de trabajo con ServicesErp.",
         reg_trust_1: "Datos Seguros",
         reg_trust_2: "Configuración Rápida",
         reg_trust_3: "Soporte 24/7",
@@ -121,7 +121,7 @@ const translations = {
     }
 };
 
-let currentLang = 'en';
+let currentLang = localStorage.getItem('site_lang') || 'en';
 
 function t(key) {
     return translations[currentLang][key] || key;
@@ -155,6 +155,7 @@ function updateTranslations() {
 
 window.setLanguage = (lang) => {
     currentLang = lang;
+    localStorage.setItem('site_lang', lang);
     updateTranslations();
 
     // Update toggle buttons
