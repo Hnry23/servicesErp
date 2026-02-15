@@ -91,6 +91,53 @@ body {
     font-size: 1.25rem;
 }
 
+.dropdown-icon {
+    margin-left: auto;
+    font-size: 0.8rem;
+    transition: var(--transition-smooth);
+}
+
+.nav-item-wrapper.expanded .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+.sub-nav {
+    list-style: none;
+    padding-left: 2.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    opacity: 0;
+}
+
+.nav-item-wrapper.expanded .sub-nav {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.sub-nav-item {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.sub-nav-item:hover,
+.sub-nav-item.active {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sub-nav-item.active {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
 /* Main Content Area */
 .main-area {
     flex: 1;

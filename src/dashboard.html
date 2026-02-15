@@ -26,8 +26,14 @@
         <li class="nav-item" data-view="schedule" data-i18n="nav_schedule">
           <i class="fas fa-calendar-alt"></i> Schedule
         </li>
-        <li class="nav-item" data-view="services" data-i18n="nav_services">
-          <i class="fas fa-toolbox"></i> Services
+        <li class="nav-item-wrapper">
+          <div class="nav-item" data-i18n="nav_services">
+            <i class="fas fa-toolbox"></i> Services <i class="fas fa-chevron-down dropdown-icon"></i>
+          </div>
+          <ul class="sub-nav">
+            <li class="sub-nav-item" data-view="price_lists" data-i18n="nav_price_lists">Price Lists</li>
+            <li class="sub-nav-item" data-view="all_services" data-i18n="nav_all_services">Service Catalog</li>
+          </ul>
         </li>
         <li class="nav-item" data-view="finance" data-i18n="nav_finance">
           <i class="fas fa-file-invoice-dollar"></i> Quotes & Invoices

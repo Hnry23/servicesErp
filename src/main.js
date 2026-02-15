@@ -1,5 +1,40 @@
 const contentArea = document.getElementById('content');
 let currentLang = 'en';
+let currentClientType = 'final';
+let currentView = 'dashboard';
+
+const priceListData = [
+  {
+    category: "cat_electrical",
+    service: "srv_panel",
+    prices: {
+      final: "$450.00",
+      insurance: "$380.00",
+      property: "$410.00"
+    },
+    multiplier: "1.5x"
+  },
+  {
+    category: "cat_plumbing",
+    service: "srv_leak",
+    prices: {
+      final: "$120.00",
+      insurance: "$95.00",
+      property: "$105.00"
+    },
+    multiplier: "1.2x"
+  },
+  {
+    category: "cat_carpentry",
+    service: "srv_shelving",
+    prices: {
+      final: "$300.00",
+      insurance: "$250.00",
+      property: "$275.00"
+    },
+    multiplier: "1.0x"
+  }
+];
 
 const translations = {
   en: {
@@ -7,6 +42,8 @@ const translations = {
     nav_operators: "Operators",
     nav_schedule: "Schedule",
     nav_services: "Services",
+    nav_price_lists: "Price Lists",
+    nav_all_services: "Service Catalog",
     nav_finance: "Quotes & Invoices",
     search_placeholder: "Search for jobs, operators...",
     admin_role: "Administrator",
@@ -45,13 +82,25 @@ const translations = {
     amount: "Amount",
     due_date: "Due Date",
     paid: "Paid",
-    pending: "Pending"
+    pending: "Pending",
+    client_type: "Client Type",
+    type_final: "Final Client",
+    type_insurance: "Insurance Company",
+    type_property: "Property Admin",
+    cat_electrical: "Electrical",
+    cat_plumbing: "Plumbing",
+    cat_carpentry: "Carpentry",
+    srv_panel: "Panel Upgrade / Rewiring",
+    srv_leak: "Leak Detection & Repair",
+    srv_shelving: "Custom Shelving Installation"
   },
   es: {
     nav_dashboard: "Panel de Control",
     nav_operators: "Operarios",
     nav_schedule: "Agenda",
     nav_services: "Servicios",
+    nav_price_lists: "Listas de Precios",
+    nav_all_services: "Catálogo de Servicios",
     nav_finance: "Cotizaciones y Facturas",
     search_placeholder: "Buscar trabajos, operarios...",
     admin_role: "Administrador",
@@ -90,7 +139,17 @@ const translations = {
     amount: "Monto",
     due_date: "Fecha de Vencimiento",
     paid: "Pagado",
-    pending: "Pendiente"
+    pending: "Pendiente",
+    client_type: "Tipo de Cliente",
+    type_final: "Cliente Final",
+    type_insurance: "Cía. de Seguros",
+    type_property: "Admin. de Fincas",
+    cat_electrical: "Electricidad",
+    cat_plumbing: "Fontanería",
+    cat_carpentry: "Carpintería",
+    srv_panel: "Mejora de Panel / Cableado",
+    srv_leak: "Detección y Reparación de Fugas",
+    srv_shelving: "Instalación de Estanterías"
   }
 };
 
@@ -190,8 +249,15 @@ const views = {
       <p>${t('calendar_placeholder')}</p>
     </div>
   `,
-  services: () => `
-    <h2>${t('services_pricing')}</h2>
+  price_lists: () => `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <h2>${t('nav_price_lists')}</h2>
+      <div class="language-switcher price-tabs" style="margin: 0;">
+        <button class="lang-btn ${currentClientType === 'final' ? 'active' : ''}" onclick="setClientType('final')">${t('type_final')}</button>
+        <button class="lang-btn ${currentClientType === 'insurance' ? 'active' : ''}" onclick="setClientType('insurance')">${t('type_insurance')}</button>
+        <button class="lang-btn ${currentClientType === 'property' ? 'active' : ''}" onclick="setClientType('property')">${t('type_property')}</button>
+      </div>
+    </div>
     <div class="data-card">
       <table>
         <thead>
@@ -203,26 +269,25 @@ const views = {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Electrical</td>
-            <td>Panel Upgrade / Rewiring</td>
-            <td>$450.00</td>
-            <td>1.5x</td>
-          </tr>
-          <tr>
-            <td>Plumbing</td>
-            <td>Leak Detection & Repair</td>
-            <td>$120.00</td>
-            <td>1.2x</td>
-          </tr>
-          <tr>
-            <td>Carpentry</td>
-            <td>Custom Shelving Installation</td>
-            <td>$300.00</td>
-            <td>1.0x</td>
-          </tr>
+          ${priceListData.map(item => `
+            <tr>
+              <td>${t(item.category)}</td>
+              <td>${t(item.service)}</td>
+              <td style="font-weight: 600; color: var(--accent-primary);">${item.prices[currentClientType]}</td>
+              <td>${item.multiplier}</td>
+            </tr>
+          `).join('')}
         </tbody>
       </table>
+    </div>
+  `,
+  all_services: () => `
+    <h2>${t('nav_all_services')}</h2>
+    <div class="data-card">
+       <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+         <i class="fas fa-toolbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+         <p>Full service catalog management would be displayed here.</p>
+       </div>
     </div>
   `,
   finance: () => `
@@ -278,13 +343,21 @@ function renderOperatorCard(name, role, status, img) {
 
 function switchView(viewName) {
   if (views[viewName]) {
+    currentView = viewName;
     contentArea.innerHTML = views[viewName]();
 
     // Update active state in sidebar
-    document.querySelectorAll('.nav-item').forEach(item => {
+    document.querySelectorAll('.nav-item, .sub-nav-item').forEach(item => {
       item.classList.remove('active');
       if (item.dataset.view === viewName) {
         item.classList.add('active');
+
+        // If it's a sub-item, also make the parent active/expanded
+        const parentNavItem = item.closest('.nav-item-wrapper')?.querySelector('.nav-item');
+        if (parentNavItem) {
+          parentNavItem.classList.add('active');
+          item.closest('.nav-item-wrapper').classList.add('expanded');
+        }
       }
     });
   }
@@ -295,16 +368,23 @@ function updateStaticTranslations() {
     const key = el.getAttribute('data-i18n');
     const translation = t(key);
 
-    // Preserve icon if it exists
-    const icon = el.querySelector('i');
-    if (icon) {
-      // Clear all text nodes but keep the icon
+    // Preserve everything that isn't a text node (icons, chevrons, etc.)
+    let hasIcons = el.querySelector('i');
+    if (hasIcons) {
+      // Find and remove existing text nodes
       Array.from(el.childNodes).forEach(node => {
         if (node.nodeType === Node.TEXT_NODE) {
           el.removeChild(node);
         }
       });
-      el.appendChild(document.createTextNode(' ' + translation));
+      // Add the new translated text at the appropriate position
+      // For nav items, we usually want text AFTER the first icon but BEFORE the chevron
+      const firstIcon = el.querySelector('i');
+      if (firstIcon && firstIcon.nextSibling) {
+        el.insertBefore(document.createTextNode(' ' + translation + ' '), firstIcon.nextSibling);
+      } else {
+        el.appendChild(document.createTextNode(' ' + translation + ' '));
+      }
     } else {
       el.innerText = translation;
     }
@@ -320,11 +400,10 @@ function updateStaticTranslations() {
 window.setLanguage = (lang) => {
   currentLang = lang;
   updateStaticTranslations();
-  const currentView = document.querySelector('.nav-item.active').dataset.view;
   switchView(currentView);
 
-  // Update toggle buttons
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  // Update language toggle buttons in the header/navbar only
+  document.querySelectorAll('.language-switcher:not(.price-tabs) .lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
 };
@@ -333,9 +412,27 @@ window.setLanguage = (lang) => {
 switchView('dashboard');
 updateStaticTranslations();
 
+// Global setters
+window.setClientType = (type) => {
+  currentClientType = type;
+  switchView('price_lists');
+};
+
 // Event Listeners for Nav
 document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
+  item.addEventListener('click', (e) => {
+    const wrapper = item.closest('.nav-item-wrapper');
+    if (wrapper && wrapper.querySelector('.sub-nav')) {
+      wrapper.classList.toggle('expanded');
+    } else if (item.dataset.view) {
+      switchView(item.dataset.view);
+    }
+  });
+});
+
+document.querySelectorAll('.sub-nav-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.stopPropagation();
     switchView(item.dataset.view);
   });
 });
