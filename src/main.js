@@ -1,5 +1,17 @@
+import { config } from './config.js';
+
+// Auth Protection
+if (!localStorage.getItem('auth_token')) {
+  window.location.href = 'login.html';
+}
+
+window.logout = () => {
+  localStorage.removeItem('auth_token');
+  window.location.href = 'index.html';
+};
+
 const contentArea = document.getElementById('content');
-let currentLang = 'en';
+let currentLang = localStorage.getItem('site_lang') || 'en';
 let currentClientType = 'final';
 let currentView = 'dashboard';
 
@@ -399,6 +411,7 @@ function updateStaticTranslations() {
 // Language Toggle Logic
 window.setLanguage = (lang) => {
   currentLang = lang;
+  localStorage.setItem('site_lang', lang);
   updateStaticTranslations();
   switchView(currentView);
 
