@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ServiceFlow | Modern Service Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <nav class="sidebar">
+      <div class="logo">
+        <i class="fas fa-bolt"></i>
+        <span>ServiceFlow</span>
+      </div>
+      <ul class="nav-links">
+        <li class="nav-item active" data-view="dashboard" data-i18n="nav_dashboard">
+          <i class="fas fa-home"></i> Dashboard
+        </li>
+        <li class="nav-item" data-view="operators" data-i18n="nav_operators">
+          <i class="fas fa-users-gear"></i> Operators
+        </li>
+        <li class="nav-item" data-view="schedule" data-i18n="nav_schedule">
+          <i class="fas fa-calendar-alt"></i> Schedule
+        </li>
+        <li class="nav-item" data-view="services" data-i18n="nav_services">
+          <i class="fas fa-toolbox"></i> Services
+        </li>
+        <li class="nav-item" data-view="finance" data-i18n="nav_finance">
+          <i class="fas fa-file-invoice-dollar"></i> Quotes & Invoices
+        </li>
+      </ul>
+      <div class="sidebar-footer" style="margin-top: auto; padding: 2rem 0;">
+        <a href="./index.html"
+          style="text-decoration: none; color: var(--text-secondary); display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.5rem; border-radius: 12px; transition: all 0.3s ease;">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </nav>
+
+    <main class="main-area">
+      <header>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" data-i18n-placeholder="search_placeholder" placeholder="Search for jobs, operators..." />
+        </div>
+        <div class="user-profile">
+          <div class="language-switcher">
+            <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+            <button class="lang-btn" data-lang="es" onclick="setLanguage('es')">ES</button>
+          </div>
+          <div class="notifications">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="avatar">JD</div>
+          <div class="user-info">
+            <p style="font-weight: 600; font-size: 0.9rem;">John Doe</p>
+            <p style="color: var(--text-secondary); font-size: 0.75rem;" data-i18n="admin_role">Administrator</p>
+          </div>
+        </div>
+      </header>
+
+      <section id="content" class="content-container">
+        <!-- Dinamic content will be injected here -->
+      </section>
+    </main>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>

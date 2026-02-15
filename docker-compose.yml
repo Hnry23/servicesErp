@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  service-dashboard:
+    build: .
+    ports:
+      - "8989:80"
+    restart: always
