@@ -344,6 +344,23 @@ td {
     color: #f87171;
 }
 
+.badge-busy {
+    background: rgba(249, 115, 22, 0.2);
+    color: #fb923c;
+}
+
+.clickable-name {
+    cursor: pointer;
+    color: var(--accent-primary);
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+.clickable-name:hover {
+    color: var(--accent-secondary);
+    text-decoration: underline;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -354,6 +371,109 @@ td {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Gantt Chart Styles */
+.gantt-wrapper {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    overflow-x: auto;
+    position: relative;
+    min-width: 800px;
+}
+
+.gantt-header {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    border-bottom: 2px solid var(--glass-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.gantt-time-label {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.gantt-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+}
+
+.gantt-row {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    align-items: center;
+    height: 50px;
+    position: relative;
+}
+
+.task-info {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+}
+
+.task-operator {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.gantt-bar-container {
+    grid-column: 2 / span 12;
+    position: relative;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+}
+
+.gantt-bar {
+    position: absolute;
+    height: 34px;
+    top: 8px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 2;
+}
+
+.gantt-bar:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+.dependency-line {
+    position: absolute;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.gantt-bar.has-dependency::before {
+    content: '\f0c1';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 0.5rem;
+    font-size: 0.7rem;
 }
 
 #content>* {
